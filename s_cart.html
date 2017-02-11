@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>cart</title>
+</head>
+<body onload="load()">
+<div>
+	<table border="5" align="center" id="table1">
+		<tr>
+			<td>ID</td>
+            <td>PRODUCT NAME</td>
+            <td>PRICE</td>
+            <td>QUANTITY</td>
+            <td>DELETE</td>
+        </tr>
+	</table>
+</div>
+<div align="center"><button><a href="s_product.html">go to product</a></button></div>
+<script type="text/javascript">
+var i=-0
+ function load() {
+ 	
+			var arr5=[];
+			var prevData=localStorage.getItem("cart");
+			arr5=JSON.parse(prevData);
+			console.log(arr5);
+            var sum=0;
+	       for(var i=0;i<arr5.length;i++){
+			var tr1=document.createElement('tr');
+			var td01=document.createElement('td');
+			td01.textContent=arr5[i].id;			
+			tr1.appendChild(td01);
+			var td11=document.createElement('td');
+			td11.textContent=arr5[i].name;
+			tr1.appendChild(td11);
+				
+			var td31=document.createElement('td');
+			td31.textContent=arr5[i].price;
+			tr1.appendChild(td31);
+
+			var td41=document.createElement('td');
+			td41.textContent=arr5[i].qty;
+			tr1.appendChild(td41);
+
+			var btn=document.createElement('button');
+			btn.textContent="DELETE";
+			btn.setAttribute("id",i);
+			btn.addEventListener("click",dlt);
+			var td5=document.createElement('td');
+			td5.appendChild(btn);
+			tr1.appendChild(td5);
+
+			sum=sum+(arr5[i].qty*arr5[i].price);
+			document.getElementById("table1").appendChild(tr1);
+		}
+	}
+	function dlt(){
+		var n=this.getAttribute("id");
+		var x=this.parentNode.parentNode.childNodes[1].textContent;
+		console.log(x);
+		var arr5=[];
+		var arr6=[];
+		var prevData=localStorage.getItem("cart");
+			arr5=JSON.parse(prevData);
+			for (var i = 0,j=0; i < arr5.length; i++) {
+				if(arr5[i].name!=x){
+					arr6[j]={
+						id : arr5[i].id,
+						name : arr5[i].name,
+						price : arr5[i].price,
+						qty : arr5[i].qty,
+						user_name : arr5[i].user_name
+					};
+					j++;
+				}
+			}
+			while(document.getElementById("table1").rows.length > 1) {
+  				document.getElementById("table1").deleteRow(1);
+					}
+			for(var i=0;i<arr6.length;i++){
+			var tr1=document.createElement('tr');
+			var td01=document.createElement('td');
+			td01.textContent=arr5[i].id;			
+			tr1.appendChild(td01);
+			var td11=document.createElement('td');
+			td11.textContent=arr5[i].name;
+			tr1.appendChild(td11);
+				
+			var td31=document.createElement('td');
+			td31.textContent=arr5[i].price;
+			tr1.appendChild(td31);
+
+			var td41=document.createElement('td');
+			td41.textContent=arr5[i].qty;
+			tr1.appendChild(td41);
+
+			var btn=document.createElement('button');
+			btn.textContent="DELETE";
+			btn.setAttribute("id",i);
+			btn.addEventListener("click",dlt);
+			var td5=document.createElement('td');
+			td5.appendChild(btn);
+			tr1.appendChild(td5);
+			document.getElementById("table1").appendChild(tr1);
+		}
+			localStorage.setItem('cart', JSON.stringify(arr6));
+
+	}
+</script>
+</body>
+</html>

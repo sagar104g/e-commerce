@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>register</title>
+</head>
+<body>
+<div align="center" >
+<form id="form1" onsubmit="return check()">
+<legend>Register Form</legend>
+    <b>Username</b><br>
+    <input type="text" id="input1" required><br><br>
+
+    <b>Password</b><br>
+    <input type="password" id="input2" required><br><br>
+        
+   <b>confirm Password</b><br>
+    <input type="password" id="input3" required><br><br>
+    <b>E-mail</b><br>
+    <input type="text" id="input4" required><br><br>
+
+    <b>Mobile Number</b><br>
+    <input type="text" id="input5" required><br><br>
+
+    <b>Address</b><br>
+    <input type="text" id="input6" required><br><br>
+
+    <button type="submit" id="button1">Sign Up</button><br>
+    
+    <a href="s_login.html">Already a User? Login.</a>
+</form>
+</div>
+<script type="text/javascript">
+var i=0;
+var arr = [],j=0;
+var arr1=[]; 
+var button1=document.getElementById("button1");
+function check(){
+    var a=document.getElementById("input1").value;
+    var b=document.getElementById("input2").value;
+    var c=document.getElementById("input3").value;
+    var d=document.getElementById("input4").value;
+    var e=document.getElementById("input5").value;
+    var f=document.getElementById("input6").value;
+    
+    if(a.length>=6){
+        if(b.length>=6 && c.length>=6 && b==c){
+            var pos=d.indexOf("@");
+            var pos1=d.lastIndexOf(".");
+            if(pos<1 || pos1<pos+2 || pos1+2>=d.length){
+                alert("Enter a valid e-mail address");
+                return true;
+            }
+            else{
+                if(isNaN(e) || e.length!=10){
+                    alert("Enter a valid Mobile Number");
+                    return true;
+                }
+                else if(e.length==10){
+                    i=i+1;
+                    alert("enter");
+                    var prevData1=localStorage.getItem("users");
+					arr1=JSON.parse(prevData1);
+					console.log(arr1);
+					var q=0;
+					if(arr1!=null){
+					alert("done");
+					for (q = 0; q < arr1.length; q++) {
+						arr[q]={
+						id : arr1[q].id,
+						name : arr1[q].name,
+						password : arr1[q].password,
+						address : arr1[q].address
+					};
+					}
+				}
+						alert("done");						
+						arr[q]={
+
+						id : i,
+						name : a,
+						password : b,
+						address : f
+					};
+						alert("done");
+						//console.log(arr);
+                    localStorage.setItem('users', JSON.stringify(arr));
+                    document.getElementById("form1").setAttribute("action","s_login.html");
+                    return true;
+                    //console.log(arrr);
+                    //alert("User ID created");
+                    //return true;
+                    //console.log(i);
+                }
+            }
+        }
+        else
+            alert("Passwords doesn't match.");
+        return true;
+    }
+    else
+        alert("The username must contain atleast 6 letters.");
+    return true;
+}
+var arrr1= [];
+//localStorage.setItem('get',JSON.stringify(arrr1));
+var prevData2=localStorage.getItem("users");
+        arrr1=JSON.parse(prevData2);
+        console.log(arrr1);
+</script>
+</body>
+</html>

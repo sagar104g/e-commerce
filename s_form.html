@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>form</title>
+</head>
+<body onload="load()">
+<h1 align="center">ADMIN's PANEL</h1>
+	<div align="center">
+		<button id="button1">Add Products</button>
+		<br><br></div>
+		<div id="div1" style="display:none" align="center">
+			<form name="form1">
+				<legend>Products</legend><br><br>
+					Product Name : <br><input type="text" id="name"><br><br>
+					Description : <br><input type="text" id="description"><br><br>
+					Price : <br><input type="text" id="price"><br><br>
+					Quantity Available : <br><input type="text" id="available"><br><br>
+			</form>
+		</div><br>
+		<div align="center">
+		<button style="display:none" id="button2">Submit Form</button>
+		</div>
+		<p id="para"></p>
+
+		<div id="div2">
+			<table id="table1" border="1" align="center">
+				<tr>
+					<td >S.No.</td>
+					<td >Product Name</td>
+					<td >Description</td>
+					<td >Price</td>
+					<td >Quatity</td>
+					<td>delete</td>
+				</tr>
+			</table>
+		</div><br><br>
+		<div align="center">
+		<button style="display: none;" id="button3">Save Products</button>
+		<button id="button4" style="display: none;">Load</button>
+		</div>
+		<div align="center"><button id="button5">show all order</button></div>
+		<table id="table2" align="center" border="5">
+			<tr>
+				<td>id</td>
+				<td>name</td>
+				<td>price</td>
+				<td>quantity</td>
+				<td>costmer</td>
+			</tr>
+		</table>
+		<script type="text/javascript">
+		document.getElementById("button5").addEventListener("click",show_all);
+var button1=document.getElementById("button1");
+button1.addEventListener("click",show);
+var button2=document.getElementById("button2");
+button2.addEventListener("click",hide);
+var button3=document.getElementById("button3");
+button3.addEventListener("click",saved);
+var button4=document.getElementById("button4");
+button4.addEventListener("click",get_stored_data);
+var arr = [];
+var arr1 = [];
+var arr2=[];
+var arr3=[];
+var arr33=[];
+var arr4=[];
+var arr12=[];
+var a="",b="",c="",d="",jk=0;
+function load() {
+	var arr33=[];
+	var prevData=localStorage.getItem("products");
+		arr33=JSON.parse(prevData);
+	console.log(arr33);
+
+	for (var i = 0; i < arr33.length; i++) {
+
+
+		arr[jk]={
+			num : arr33[i].num,
+			name : arr33[i].name,
+			description : arr33[i].description,
+			price : arr33[i].price,
+			quatity : arr33[i].quatity
+		};
+		jk=jk+1;
+		var tr=document.createElement('tr');
+		//tr.setAttribute("height", 40);
+		var td0=document.createElement('td');
+		td0.textContent=arr33[i].num;
+		tr.appendChild(td0);
+
+		//a=document.getElementById("name").value;
+		var td1=document.createElement('td');
+		td1.textContent=arr33[i].name;
+		tr.appendChild(td1);
+
+		//b=document.getElementById("description").value;
+		var td2=document.createElement('td');
+		td2.textContent=arr33[i].description;
+		tr.appendChild(td2);
+				
+		//c=document.getElementById("price").value;
+		var td3=document.createElement('td');
+		td3.textContent=arr33[i].price;
+		tr.appendChild(td3);
+
+		//d=document.getElementById("available").value;
+		var td4=document.createElement('td');
+		td4.textContent=arr33[i].quatity;
+		tr.appendChild(td4);
+
+		var bt1=document.createElement('button');
+		bt1.textContent='delete';
+		bt1.addEventListener("click",deleteRow)
+		tr.appendChild(bt1);
+
+		document.getElementById("table1").appendChild(tr);
+	}
+}
+function show(){
+	document.getElementById("div1").style.display="block";
+	document.getElementById("button2").style.display="block";
+	document.getElementById("name").value=" ";
+	document.getElementById("description").value=" ";
+	document.getElementById("price").value=" ";
+	document.getElementById("available").value=" ";
+	document.getElementById("button3").style.display="none";
+	document.getElementById("button4").style.display="block";
+}
+function hide(){
+	if(document.getElementById("name").value.length==0 || document.getElementById("description").value.length==0 || document.getElementById("price").value.length==0 || document.getElementById("available").value.length==0){
+		alert("Fill the form carefully");
+	}
+	else{
+		var tr=document.createElement('tr');
+		tr.setAttribute("height", 40);
+		var td0=document.createElement('td');
+		td0.textContent=jk;
+		tr.appendChild(td0);
+
+		a=document.getElementById("name").value;
+		var td1=document.createElement('td');
+		td1.textContent=a;
+		tr.appendChild(td1);
+
+		b=document.getElementById("description").value;
+		var td2=document.createElement('td');
+		td2.textContent=b;
+		tr.appendChild(td2);
+				
+		c=document.getElementById("price").value;
+		var td3=document.createElement('td');
+		td3.textContent=c;
+		tr.appendChild(td3);
+
+		d=document.getElementById("available").value;
+		var td4=document.createElement('td');
+		td4.textContent=d;
+		tr.appendChild(td4);
+
+
+		var bt1=document.createElement('button');
+		bt1.textContent='delete';
+		bt1.addEventListener("click",deleteRow)
+		tr.appendChild(bt1);
+
+		arr[jk]={
+			num : jk,
+			name : a,
+			description : b,
+			price : c,
+			quatity : d
+		};
+		jk++;
+		document.getElementById("table1").appendChild(tr);
+		document.getElementById("div2").style.display="block";
+		document.getElementById("button3").style.display="block";
+		document.getElementById("div1").style.display="none";
+		document.getElementById("button2").style.display="none";
+		document.getElementById("button4").style.display="block";
+	}
+}
+function deleteRow(){
+	var dlt_name=this.parentNode.childNodes[1].textContent;
+	//console.log(dlt_name);
+	//this.parentNode.parentNode.removeChild(this.parentNode);
+	var prevData=localStorage.getItem("products");
+	arr33=JSON.parse(prevData);
+	var pp=0;
+	for (var i = 0; i < arr33.length; i++) {
+		console.log(dlt_name);
+		console.log(arr33[i].name);
+		if(arr33[i].name!=dlt_name){
+			arr12[pp]={
+			num : arr33[i].num,
+			name : arr33[i].name,
+			description : arr33[i].description,
+			price : arr33[i].price,
+			quatity : arr33[i].quatity
+		};
+		pp++;
+		}
+		localStorage.setItem('products', JSON.stringify(arr12));
+	}
+	while(document.getElementById("table1").rows.length > 1) {
+  				document.getElementById("table1").deleteRow(1);
+					}
+	load();
+}
+function saved(){
+	localStorage.setItem('products', JSON.stringify(arr));
+}
+function get_stored_data(){
+	var prevData=localStorage.getItem("products");
+	arr1=JSON.parse(prevData);
+	console.log(arr1);
+}
+function show_all() {
+document.getElementById("button5").style.display="block";
+var prevData22=localStorage.getItem("admin_cart");
+
+			arr33=JSON.parse(prevData22);
+
+			console.log(arr33);
+			if(arr33!=null){
+				while(document.getElementById("table2").rows.length > 1) {
+  				document.getElementById("table2").deleteRow(1);
+					}
+			for(var i=0;i<arr33.length;i++){
+			var tr1=document.createElement('tr');
+			var td01=document.createElement('td');
+			td01.textContent=arr33[i].id;			
+			tr1.appendChild(td01);
+			var td11=document.createElement('td');
+			td11.textContent=arr33[i].name;
+			tr1.appendChild(td11);
+				
+			var td31=document.createElement('td');
+			td31.textContent=arr33[i].price;
+			tr1.appendChild(td31);
+
+			var td41=document.createElement('td');
+			td41.textContent=arr33[i].qty;
+			tr1.appendChild(td41);
+
+			var td51=document.createElement('td');
+			td51.textContent=arr33[i].user_name;
+			tr1.appendChild(td51);
+			//var sum=sum+(arr3[i].qtyy*arr3[i].price);
+			document.getElementById("table2").appendChild(tr1);
+		}
+	}
+}
+
+		</script>
+</body>
+</html>

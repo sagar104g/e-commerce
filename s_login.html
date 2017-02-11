@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>login page</title>
+</head>
+<body>
+<div align="center" id="div1">
+<form id="form1">
+<legend>login</legend><br><br>
+<b>user name:=</b>
+<input type="text" id="input1"><br><br><br>
+<b>password:=</b>
+<input type="password" id="input2"><br><br><br><br>
+<button id="button1" type="submit">login</button><br><br><br>
+</form>
+<a href=s_register.html>new user? register</a><br><br><br>
+</div>
+<script type="text/javascript">
+var flag=0;
+	var a=document.getElementById("button1");
+	a.addEventListener("click",check);
+	var arr4=[];
+function check() {
+			var x=document.getElementById("input1").value;
+            var y=document.getElementById("input2").value;
+            if(x=="qwertyuiop"&&y=="qwertyuiop"){
+            	document.getElementById("form1").setAttribute("action","s_form.html");
+            	flag=1;
+            }else{
+           var prevData=localStorage.getItem("users");
+		   arr4=JSON.parse(prevData);
+		   if(arr4!=null){
+		   	for (var i = 0; i < arr4.length; i++) {
+		   		if(arr4[i].name==x&&arr4[i].password==y){
+                sessionStorage.setItem('user_in', x);
+
+// Get saved data from sessionStorage
+//var data = sessionStorage.getItem('key');
+
+// Remove saved data from sessionStorage
+//sessionStorage.removeItem('key');
+
+// Remove all saved data from sessionStorage
+//sessionStorage.clear();
+
+		   			document.getElementById("form1").setAttribute("action","s_product.html");
+		   			flag=1;
+		   		}
+		   	}
+		   }else{
+        	alert("wrong combination");
+        }
+		}
+		   if(flag==0){
+		   	alert("wrong combination");
+		   }
+        
+}
+</script>
+</body>
+</html>

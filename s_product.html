@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>products</title>
+</head>
+<body onload="load()">
+<p id="p1"></p>
+<b>search item:=</b>
+<input type="text" placeholder="search" id="search">
+<button id="button2">search</button><br><br><br>
+<button id="button1"><a href="s_login.html">logout</a></button>
+<table border="2" align="center" id="table1">
+	<tr>
+		<td>S.No.</td>
+		<td>Product Name</td>
+		<td>Description</td>
+		<td>Price</td>
+		<td>Quatity</td>
+		<td>Entry</td>
+	</tr>
+</table><br><br><br>
+<div align="center"><b>DATA ON CART</b></div>
+<table border="2" align="center" id="table2">
+	<tr>
+		<td>ID</td>
+		<td>Product Name</td>
+		<td>Price</td>
+		<td>Quatity</td>
+			
+	</tr>
+</table><br><br><br>
+<b id="b1"></b><br><br><br>
+<div align="center"><button id="but">CHECKOUT</button></div><br><br><br>
+<div align="center"><b>SEARCHED DATA ON CART</b><br>
+<table border="2" align="center" id="table22">
+	<tr>
+		<td>S.No.</td>
+		<td>Product Name</td>
+		<td>Description</td>
+		<td>Price</td>
+		<td>Quatity</td>
+		<td>Entry</td>
+	</tr>
+</table><br><br><br>
+</div>
+<script type="text/javascript">
+document.getElementById("button2").addEventListener("click",search);
+  document.getElementById("but").addEventListener("click",checkout);
+	var i=0;
+	var ans = sessionStorage.getItem('user_in');
+		document.getElementById("p1").innerHTML="Hello, Mr."+ans;
+		var arr1 = [];
+		var arr2 = [];
+		var arr3 = [];
+		var arr4 = [];
+		var arr5 = [];
+		var arr6 = [];
+		var arr7 = [];
+		var j=0;
+		function search() {
+			var v=document.getElementById("search").value.length;
+			if(v!=0){
+				var qq=0;
+				var word=document.getElementById("search").value;
+				
+				var prevData=localStorage.getItem("products");
+				arr1=JSON.parse(prevData);
+				console.log(arr1);
+				for (var i = 0; i < arr1.length; i++) {
+					console.log(arr1[i].name);
+					console.log(word);
+					if(0<arr1[i].name.search(word)){
+					//	console.log(arr1[i].name);
+						arr2[qq]={
+									num : arr1[i].num,
+									name : arr1[i].name,
+									description : arr1[i].description,
+									price : arr1[i].price,
+									quatity : arr1[i].quatity
+								};
+								qq++;
+					}
+				}
+				var oo=0;
+				for (var i = 0; i < arr1.length; i++) {
+				
+					var count = (arr1[i].description.match(word) || []).length;
+					//console.log(count);
+					if(count!=0){
+						if(0>arr1[i].name.search(word))
+						arr3[oo]={
+							count : count,
+							name : arr1[i].name
+						};
+						//console.log(oo);
+						oo++;
+
+					}
+				}
+				
+				quickSort(arr3,0,arr3.length);
+				
+
+
+
+				for (var i = 0; i < arr1.length; i++) {
+					//console.log(arr1[i].description.search(word));
+					for (var j = 1; j < arr3.length; j++) {
+					console.log(arr3);
+					console.log(arr1);
+					if(arr1[i].name==arr3[j].name){
+
+						arr2[qq]={
+									num : arr1[i].num,
+									name : arr1[i].name,
+									description : arr1[i].description,
+									price : arr1[i].price,
+									quatity : arr1[i].quatity
+								};
+								qq++;
+					}
+				}
+			}
+				console.log(arr2);
+				localStorage.setItem('search_item', JSON.stringify(arr2));
+				//var arr2 = sessionStorage.getItem('search_item');
+				//console.log(arr2);
+
+
+			}
+			var prevData=localStorage.getItem("search_item");
+			arr1=JSON.parse(prevData);
+			console.log(arr1);
+			while(document.getElementById("table22").rows.length > 1) {
+  				document.getElementById("table22").deleteRow(1);
+					}
+			for(var i=0;i<arr1.length;i++){
+			
+			var tr=document.createElement('tr');
+			var td0=document.createElement('td');
+			td0.textContent=arr1[i].num;
+			tr.appendChild(td0);
+
+			var td1=document.createElement('td');
+			td1.textContent=arr1[i].name;
+			tr.appendChild(td1);
+
+			var td2=document.createElement('td');
+			td2.textContent=arr1[i].description;
+			tr.appendChild(td2);
+				
+			var td3=document.createElement('td');
+			td3.textContent=arr1[i].price;
+			tr.appendChild(td3);
+
+			var btn=document.createElement('button');
+			
+			btn.textContent="Add to cart";
+			btn.setAttribute("id",i);
+			btn.addEventListener("click",add_cart);
+			var td5=document.createElement('td');
+			td5.appendChild(btn);
+			tr.appendChild(td5);
+
+			var btn1=document.createElement('a');
+			btn1.textContent="Show";
+			btn1.setAttribute("href","s_cart.html");
+			var td6=document.createElement('td');
+			td6.appendChild(btn1);
+			tr.appendChild(td6);
+
+			document.getElementById("table22").appendChild(tr);
+	}
+		}
+//
+
+function partition (arr, low, high)
+{
+    var pivot = arr[high];  
+    var i = (low - 1);  
+ 	var a;
+    for (var j = low; j <= high- 1; j++)
+    {
+        if (arr[j] <= pivot)
+        {
+            i++;  
+          a=arr[i];
+          arr[i]=arr[j];
+          arr[j]=a;  
+        }
+    }
+    	  a=arr[i+1];
+          arr[i+1]=arr[high];
+          arr[high]=a;
+    return (i + 1);
+}
+ 
+function quickSort( arr, low, high)
+{
+    if (low < high)
+    {
+        
+        var pi = partition(arr, low, high);
+ 
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+ 
+		//
+	function load(){
+		var prevData=localStorage.getItem("products");
+		arr1=JSON.parse(prevData);
+		console.log(arr1);
+		for(var i=0;i<arr1.length;i++){
+			
+			var tr=document.createElement('tr');
+			var td0=document.createElement('td');
+			td0.textContent=arr1[i].num;
+			tr.appendChild(td0);
+
+			var td1=document.createElement('td');
+			td1.textContent=arr1[i].name;
+			tr.appendChild(td1);
+
+			var td2=document.createElement('td');
+			td2.textContent=arr1[i].description;
+			tr.appendChild(td2);
+				
+			var td3=document.createElement('td');
+			td3.textContent=arr1[i].price;
+			tr.appendChild(td3);
+
+			var btn=document.createElement('button');
+			
+			btn.textContent="Add to cart";
+			btn.setAttribute("id",i);
+			btn.addEventListener("click",add_cart);
+			var td5=document.createElement('td');
+			td5.appendChild(btn);
+			tr.appendChild(td5);
+
+			var btn1=document.createElement('a');
+			btn1.textContent="Show";
+			btn1.setAttribute("href","s_cart.html");
+			var td6=document.createElement('td');
+			td6.appendChild(btn1);
+			tr.appendChild(td6);
+
+			document.getElementById("table1").appendChild(tr);
+	}
+	}
+function add_cart(){
+	var arr9=[];
+	var arr11=[];
+	//localStorage.setItem('cart', JSON.stringify(arr11));
+	var flag=0;
+	var n=this.getAttribute("id");
+		var prevData=localStorage.getItem("cart");
+		arr4=JSON.parse(prevData);
+		console.log(arr4);
+		var qtyy = prompt("Please enter quantity");
+		while(document.getElementById("table2").rows.length > 1) {
+  				document.getElementById("table2").deleteRow(1);
+					}
+		if(arr4[0]!=null){
+			for(var i=0;i<arr4.length;i++){
+				if(arr1[n].name==arr4[i].name){
+					flag=1;
+					arr4[i].qty=parseInt(arr4[i].qty)+parseInt(qtyy)
+					/*arr4[i]={
+						id : arr4[i].id,
+						name : arr4[i].name,
+						price : arr4[i].price,
+						user_name : arr4[i].user_name,
+						qty : arr4[i].qty+qtyy
+					};*/	
+					break;
+				}
+			}
+			if (flag==0){
+				var i;
+				for (i = 0; i < arr4.length; i++) {
+					 arr9[i]={
+						id : arr4[i].id,
+						name : arr4[i].name,
+						price : arr4[i].price,
+						qty : arr4[i].qty,
+						user_name : arr4[i].user_name
+					};
+				}
+				arr9[i]={
+						id : n,
+						name : arr1[n].name,
+						price : arr1[n].price,
+						qty : qtyy,
+						user_name : ans
+					};
+
+			//j=j+1;
+	localStorage.setItem('cart', JSON.stringify(arr9));
+}else{
+	for (i = 0; i < arr4.length; i++) {
+		arr9[i]={
+						id : arr4[i].id,
+						name : arr4[i].name,
+						price : arr4[i].price,
+						qty : arr4[i].qty,
+						user_name : arr4[i].user_name
+					};				}
+				localStorage.setItem('cart', JSON.stringify(arr9));
+}}else{
+	//alert("lol");
+	arr2[0]={     
+				id : n,
+				name : arr1[n].name,
+				price : arr1[n].price,
+				qty : qtyy,
+				user_name : ans
+			};
+			//j=j+1;
+	localStorage.setItem('cart', JSON.stringify(arr2));
+}
+			var prevData1=localStorage.getItem("cart");
+			arr5=JSON.parse(prevData1);
+			console.log(arr5);
+            var sum=0;
+	       for(var i=0;i<arr5.length;i++){
+	       	if (ans==arr5[i].user_name) {
+			var tr1=document.createElement('tr');
+			var td01=document.createElement('td');
+			td01.textContent=arr5[i].id;			
+			tr1.appendChild(td01);
+			var td11=document.createElement('td');
+			td11.textContent=arr5[i].name;
+			tr1.appendChild(td11);
+				
+			var td31=document.createElement('td');
+			td31.textContent=arr5[i].price;
+			tr1.appendChild(td31);
+
+			var td41=document.createElement('td');
+			td41.textContent=arr5[i].qty;
+			tr1.appendChild(td41);
+			sum=sum+(arr5[i].qty*arr5[i].price);
+			document.getElementById("table2").appendChild(tr1);
+		}
+	}
+		document.getElementById("b1").innerHTML="total sum="+sum;
+		
+
+}
+function checkout() {
+	var arr22=[];
+	var prevData=localStorage.getItem("admin_cart");
+			arr6=JSON.parse(prevData);
+			//console.log(arr6);
+			if(arr6!=null){
+				var i;
+				for (i = 0; i < arr6.length; i++) {
+					arr22[i]={
+						id : arr6[i].id,
+						name : arr6[i].name,
+						price : arr6[i].price,
+						qty : arr6[i].qty,
+						user_name : arr6[i].user_name
+					};
+				}
+				var prevData1=localStorage.getItem("cart");
+			arr6=JSON.parse(prevData1);
+			console.log(arr6);
+				for (var j=i,k=0; k < arr6.length; k++,j++) {
+					arr22[j]={
+						id : arr6[k].id,
+						name : arr6[k].name,
+						price : arr6[k].price,
+						qty : arr6[k].qty,
+						user_name : arr6[k].user_name
+					};
+				}
+				localStorage.setItem('admin_cart', JSON.stringify(arr22));
+
+			 }else{
+			 	
+			 	var prevData1=localStorage.getItem("cart");
+			arr6=JSON.parse(prevData1);
+			//console.log(arr6);
+				for (var k=0; k < arr6.length; k++) {
+					arr22[k]={
+						id : arr6[k].id,
+						name : arr6[k].name,
+						price : arr6[k].price,
+						qty : arr6[k].qty,
+						user_name : arr6[k].user_name
+					};
+				}
+				console.log(arr22);
+				localStorage.setItem('admin_cart', JSON.stringify(arr22));
+			}
+}
+</script>
+
+</body>
+</html>
